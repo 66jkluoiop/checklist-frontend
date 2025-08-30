@@ -16,7 +16,7 @@ const showCreateForm = () => {
 <template>
   <div class="container">
     <header class="header">
-      <h1>任务管理系统</h1>
+      <h1>任务管理</h1>
       <el-button type="primary" size="large" :icon="Plus" @click="showCreateForm">
         创建新任务
       </el-button>

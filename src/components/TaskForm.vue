@@ -43,12 +43,18 @@ const resetForm = () => {
   if (formRef.value) {
     formRef.value.resetFields()
   }
+  // 重置所有表单数据
   formData.value = {
     title: '',
     description: '',
     content: '',
     priority: 'medium',
     due_date: ''
+  }
+  // 重置富文本编辑器
+  const editor = editorRef.value
+  if (editor) {
+    editor.setHtml('')
   }
   isEdit.value = false
   editId.value = null
@@ -77,8 +83,8 @@ const submitForm = async () => {
       ElMessage.success('任务创建成功')
     }
 
-    formVisible.value = false
     resetForm()
+    formVisible.value = false
   } catch (error) {
     if (error.message) {
       ElMessage.error(isEdit.value ? '任务更新失败' : '任务创建失败')
@@ -88,8 +94,8 @@ const submitForm = async () => {
 
 // 取消创建
 const cancelForm = () => {
-  formVisible.value = false
   resetForm()
+  formVisible.value = false
 }
 
 // 编辑任务
