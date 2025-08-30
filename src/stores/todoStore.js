@@ -95,9 +95,15 @@ export const useTaskStore = defineStore('task', {
       this.error = null
       try {
         const response = await taskApi.updateTask(id, data)
+        const updatedTask = response.data.data
+        // 更新任务列表中的数据
         const index = this.tasks.findIndex(t => t.id === id)
         if (index !== -1) {
-          this.tasks[index] = response.data.data
+          this.tasks[index] = updatedTask
+        }
+        // 更新当前任务数据
+        if (this.currentTask && this.currentTask.id === id) {
+          this.currentTask = updatedTask
         }
       } catch (error) {
         this.error = error.message

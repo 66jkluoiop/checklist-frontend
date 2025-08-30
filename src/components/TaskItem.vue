@@ -1,7 +1,10 @@
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTaskStore } from '../stores/todoStore'
 import { ElMessage, ElMessageBox } from 'element-plus'
+
+const router = useRouter()
 
 const props = defineProps({
   task: {
@@ -106,7 +109,7 @@ const deleteTask = async () => {
     <div class="task-content">
       <div class="task-header">
         <div class="task-title-wrapper">
-          <h3 class="task-title">{{ task.title }}</h3>
+          <h3 class="task-title" @click="router.push(`/task/${task.id}`)" style="cursor: pointer">{{ task.title }}</h3>
           <div class="task-tags">
             <el-tag
               :type="priorityConfig[task.priority]?.type"
@@ -128,9 +131,8 @@ const deleteTask = async () => {
         </div>
       </div>
       
-      <p class="task-description" v-if="task.description">
-        {{ task.description }}
-      </p>
+      <div class="task-description" v-if="task.description">{{ task.description }}</div>
+      <div class="task-content-preview" v-if="task.content" v-html="task.content"></div>
       
       <div class="task-footer">
         <span class="task-due-date" v-if="task.due_date">
@@ -222,6 +224,75 @@ const deleteTask = async () => {
   color: var(--text-regular);
   font-size: 14px;
   line-height: 1.6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  max-height: 44px;
+}
+
+.task-content-preview {
+  margin: 12px 0;
+  color: var(--text-regular);
+  font-size: 14px;
+  line-height: 1.6;
+  max-height: 100px;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--page-background);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.task-content-preview::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(transparent, var(--page-background));
+}
+
+.task-content-preview :deep(p) {
+  margin: 8px 0;
+}
+
+.task-description :deep(img) {
+  max-width: 100%;
+  height: auto;
+}
+
+.task-description :deep(table) {
+  border-collapse: collapse;
+  margin: 8px 0;
+}
+
+.task-description :deep(td),
+.task-description :deep(th) {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+}
+
+.task-description :deep(ul),
+.task-description :deep(ol) {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.task-description :deep(pre) {
+  background-color: var(--page-background);
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 8px 0;
+}
+
+.task-description :deep(blockquote) {
+  border-left: 4px solid var(--border-color);
+  margin: 8px 0;
+  padding: 8px 16px;
+  background-color: var(--page-background);
 }
 
 .task-footer {
